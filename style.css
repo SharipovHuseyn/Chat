@@ -1,0 +1,304 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.d {
+    color: white;
+    margin-left: 824px;
+}
+
+.header {
+    width: 1854px;
+    height: 51px;
+    border-radius: 40px;
+    background-color: blueviolet;
+    margin-left: 25px;
+    margin-top: 10px;
+    border: 4px solid white;
+}
+
+.mess {
+    width: 1300px;
+    height: 700px;
+    border-radius: 40px 14px 14px 40px;
+    background-image: url(image/fon2.jpg);
+    overflow-x: auto;
+    border: 4px solid white;
+}
+
+.users {
+    width: 500px;
+    height: 700px;
+    border-radius: 40px 8px 8px 40px;
+    background-color: blueviolet;
+    height: 700px;
+    overflow-x: auto;
+    border: 4px solid white;
+}
+
+.block {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+
+.triangle-bottom-left {
+    width: 0;
+    height: 0;
+    border-bottom: 950px solid #5bc0de;
+    border-right: 1000px solid transparent;
+}
+
+.triangle-top-right {
+    width: 0;
+    height: 0;
+    border-top: 950px solid #f0ad4e;
+    border-left: 900px solid transparent;
+}
+
+.choice {
+    display: flex;
+    justify-content: space-between;
+}
+
+.textarea {
+    width: 1042px;
+    height: 28px;
+    border-radius: 20px;
+    font-size: 25px;
+    color: white;
+    background-color: blueviolet;
+    padding: 17px;
+    border: 4px solid white;
+}
+
+.send {
+    width: 200px;
+    height: 80px;
+    color: white;
+    background-color: rgb(39, 39, 255);
+    border-radius: 20px;
+    border: 1px;
+    text-align: center;
+    font-size: 28px;
+    margin-left: 25px;
+
+}
+.send:hover{
+    width: 200px;
+    height: 80px;
+    color: white;
+    background-color: rgb(0, 0, 255);
+    border-radius: 20px;
+    border: 1px;
+    text-align: center;
+    font-size: 28px;
+    margin-left: 25px;
+
+}
+
+
+.messages {
+    display: flex;
+    align-items: center;
+}
+
+.reg {
+    width: 400px;
+    height: 600px;
+    border-radius: 40px;
+    border: 2px rgb(0 0 0);
+    background-color: blueviolet;
+    text-align: center;
+    border: 4px solid white;
+}
+
+.form_reg {
+    width: 300px;
+    height: 45px;
+    border-radius: 20px;
+    border: 1px;
+    color: black;
+    font-size: 25px;
+    padding: 4px;
+}
+
+.text_form {
+    font-size: 25px;
+}
+
+.form_button {
+    width: 200px;
+    height: 50px;
+    border: 1px;
+    border-radius: 40px;
+    background-color: rgb(97 0 158);
+    font-size: 25px;
+    color: white;
+}
+
+.b {
+    font-size: 50px;
+    color: white;
+}
+
+.tt {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+.form_send {
+    display: flex;
+    align-items: center;
+    margin-left: 25px;
+    margin-top: 25px;
+}
+
+.regis {
+    font-size: 100px;
+    transform: rotate(43deg);
+    margin-top: 322px;
+    margin-left: 205px;
+
+}
+
+.log {
+    font-size: 100px;
+    transform: rotate(47deg);
+    margin-top: -538px;
+    margin-left: -645px;
+    text-decoration: none;
+}
+
+.users_1 {
+    display: block;
+    width: 325px;
+    height: 82px;
+    background-color: #f0ad4e;
+    border-radius: 20px;
+    margin-top: 30px;
+    margin-left: 84px;
+    text-decoration: none;
+}
+.users_1:hover {
+    display: block;
+    width: 325px;
+    height: 82px;
+    background-color: #ff9500;
+    border-radius: 20px;
+    margin-top: 30px;
+    margin-left: 84px;
+    text-decoration: none;
+}
+
+.sircle {
+    width: 75px;
+    height: 82px;
+    border-radius: 20px;
+    background-color: yellowgreen;
+    margin-top: -46px;
+}
+
+.id {
+    font-size: 45px;
+    text-align: center;
+    color: white;
+}
+
+.name_sty {
+    font-size: 25px;
+    margin-left: 175px;
+}
+
+::-webkit-scrollbar {
+    width: 20px;
+    margin-left: -10px;
+}
+
+::-webkit-scrollbar-track {
+    background: blueviolet;
+    border-radius: 10px;
+    margin-left: -10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: orange;
+    border-radius: 20px;
+    border: 3px solid blueviolet;
+    margin-left: -10px;
+}
+
+.frends {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    color: white;
+}
+
+.mess1 {
+    background-color: #67e7ad;
+    border-radius: 20px 20px 0 20px;
+    padding: 16px;
+    display: flex;
+    font: message-box;
+    max-width: 300px;
+    margin-left: auto;
+}
+
+.text1 {
+    font-size: 20px;
+    word-wrap: break-word;
+    width: 100%;
+}
+
+.block1 {
+    margin-top: 42px;
+}
+
+.mess2 {
+    background-color: #00a8ff;
+    border-radius: 20px 20px 20px 0;
+    margin-left: 66px;
+    padding: 16px;
+    font: message-box;
+    max-width: 300px;
+}
+
+.My_name {
+    display: table;
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+}
+
+.fren {
+    width: 100%;
+    height: 59px;
+    background-color: #592aa2;
+}
+.text3{
+    font-size: 35px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    font-family: monospace;
+}
+.date{
+    display: flex;
+    justify-content: end;
+    color: white;
+    font-size: 20px;
+}
+.date1{
+    color: white;
+    font-size: 20px;
+    margin-left: 68px;
+}
+.your{
+    font-size: 19px;
+    color: white;
+    margin-left: 241px;
+    margin-top: -15px;
+}
