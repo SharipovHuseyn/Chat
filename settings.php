@@ -1,7 +1,6 @@
 <?php
 $mysql = new mysqli("localhost", "root", "", "Chat");
 $mysql->query("SET NAMES 'utf8'");
-$userid = $mysql->query("SELECT `name` FROM `users`");
 
 $error = false;
 $error_name = '';
@@ -21,8 +20,10 @@ if (isset($_POST["email"])) {
 }
 
 if (isset($_GET["update"])) {
-    $update = $_GET["update"];
+    $user_id = $_GET["update"];
 }
+
+
 
 if (isset($_POST["send"])) {
 
@@ -42,7 +43,7 @@ if (isset($_POST["send"])) {
     }
 
         if (!$error) { 
-            $mysql->query("UPDATE `users` SET name = '$name', password = '$password', login = '$email' WHERE name = '$update'");
+            $mysql->query("UPDATE `users` SET name = '$name', password = '$password', login = '$email' WHERE id_user = '$user_id'");
             header("Location: chat.php");
             exit;
         }

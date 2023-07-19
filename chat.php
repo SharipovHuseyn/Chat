@@ -1,16 +1,16 @@
 <?php
 session_start();
-$current_user_id = $_SESSION['id_user'];
 
 $mysql = new mysqli("localhost", "root", "", "Chat");
 $mysql->query("SET NAMES 'utf8'");
 
-$result = $mysql->query("SELECT * FROM `users`");
-$mess = $mysql->query("SELECT * FROM `messages`");
+$friends = $mysql->query("SELECT * FROM `users`");
 $My_name = $mysql->query("SELECT * FROM `users`");
-$f_name = $mysql->query("SELECT * FROM `users`");
+$fr_name = $mysql->query("SELECT * FROM `users`");
 $today = date_default_timezone_set('Tajikistan/Dushanbe');
+$showMessages = $mysql->query("SELECT users.id_user, users.name, messages.text, messages.created_at FROM users INNER JOIN messages ON messages.id_user_from WHERE users.id_user = messages.id_user_from");
 
+$current_user_id = $_SESSION['id_user'];
 $error_mess = "";
 $error = false;
 date_default_timezone_set('Asia/Dushanbe');
@@ -29,10 +29,10 @@ if (isset($_POST["message"])) {
     $message = $_POST["message"];
 }
 
-function printResult($result)
+function printfriends($friends)
 {
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
+    if ($friends->num_rows > 0) {
+        while ($row = $friends->fetch_assoc()) {
             if ($row['id_user'] == $_SESSION['id_user']) {
                 $row['name'];
             } else {
@@ -48,55 +48,34 @@ function printResult($result)
         }
     }
 }
-// function f_name($f_name)
-// {
-//     while ($row = $f_name->fetch_assoc()) {
-//         if ($row['id_user'] == $_GET["id_user"]) {
-//             $row['name'];
-//         }
 
-//     }
-// }
-
-function mess($mess)
+function showMessages($showMessages)
 {
-    if ($mess->num_rows > 0) {
-        while ($row = $mess->fetch_assoc()) {
-            $row['id_user_from'] . "<br />";
-            $row['id_user_to'];
-            $row['id_user'];
-            
-            if ($row['id_user_to'] == $_GET["id_user"]) {
+    if ($showMessages->num_rows > 0) {
+        while ($row = $showMessages->fetch_assoc()) {
+            print_r($row['user_id']);
+            if ($row['id_user'] == $_SESSION['id_user']) {
                 echo "<section class='soob'>
-                <div class = 'mess1'><p class='text1'>" . $row['text'] . "</p></div>
-                </section><p class='date'>" . $row['created_at'] . "</p>
+                <div class = 'mess1'><p class='text1'>" . $row['text'] . "</p>
+                <p class='date'>" . substr($row['created_at'], 10, 6) . "</p></div>
+                </section>
                 <br /><br />";
             }
-            // elseif ($row['id_user'] == $_GET["id_user"]) {
-            //     echo "<p class='your'>" . $row['f_name'] . "</p>";
-            //     ;
-            // }
-            if ($row['id_user_from'] == $_GET["id_user"]) {
-                if ($row['id_user'] == $_GET["id_user"]){
-                echo "ffff";
-                }
+            if ($row['id_user'] == $_GET["id_user"]){
                 echo "<div class = 'mess2'>
-                <p class='text1'>" . $row['text'] . "</p></div>
-                <p class='date1'>" . $row['created_at'] . "</p>
-                <br /><br />";
+                <p class='f'>".$row['name']."</p>
+                <p class='text1'>" . $row['text'] . "</p>
+                <p class='date1'>" . substr($row['created_at'], 10, 6) . "</p>
+                </div>
+                <br /><br />";  
             }
+          
         }
 
     }
 }
-// function print_arr($data)
-// {
-//     echo '<pre>';
-//     print_r($data);
-//     echo '</pre>';
-// }
 
-while ($row = $f_name->fetch_assoc()) {
+while ($row = $fr_name->fetch_assoc()) {
     if ($row['id_user'] == $_GET["id_user"]) {
         $your = $row['name'];
     }
@@ -108,7 +87,7 @@ if($message == ""){
     $error = true;
 }
 
-if (isset($_POST['send'])) {
+if (isset($_POST['messages_send'])) {
     if(!$error)
     $mysql->query("INSERT INTO `messages` (`id_user_from`, `id_user_to`, `text`, `created_at`) VALUES('$current_user_id', '$id_user', '$message', '$today')");
 }
@@ -139,9 +118,10 @@ $mysql->close();
     <header class="header">
         <div class="flex">
             <h1 class="d">CHAT.RU</h1>
-            <div class="My_name">
+            <div class="general">
+            <p class="My_name"><?= My_name($My_name) ?></p>
                 <form action = "settings.php" method="get">
-                    <input type='submit' name='update' style='border: 1px; background-color: dodgerblue; color: white; margin-left: 695px; padding: 10px 20px; font-size: 18px; border-radius: 12px; margin-top: 5px;' value='<?= My_name($My_name) ?>'>
+                    <button type='submit' name='update' class="user_id" value='<?= $current_user_id ?>'>
                 </form>
             </div>
         </div>
@@ -156,19 +136,18 @@ $mysql->close();
                         </h1>
                     </div>
                     <div class="block1">
-                        <?= mess($mess) ?>
-
+                        <?= showMessages($showMessages) ?>
                     </div>
                 </div>
                 <div class="users">
                     <h1 class="frends">МОИ ДРУЗЬЯ</h1>
-                    <?= printResult($result) ?>
+                    <?= printfriends($friends) ?>
                 </div>
             </div>
             <div class="messages">
                 <form class="form_send" action="" method="post">
                     <input class="textarea" type="text" name="message" placeholder="<?= $error_mess ?>">
-                    <input type="submit" class="send" name="send" value="Отправить">
+                    <input type="submit" class="send" name="messages_send" value="Отправить">
                 </form>
             </div>
         </section>
