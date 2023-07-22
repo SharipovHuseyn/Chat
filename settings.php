@@ -42,8 +42,11 @@ if (isset($_POST["send"])) {
         $error =true;
     }
 
+    $fileToUpload = "/opt/lampp/htdocs/chat/form-data/data" . $_FILES["fileToUpload"]["name"];
+    move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $fileToUpload);
+
         if (!$error) { 
-            $mysql->query("UPDATE `users` SET name = '$name', password = '$password', login = '$email' WHERE id_user = '$user_id'");
+            $mysql->query("UPDATE `users` SET name = '$name', password = '$password', login = '$email', avatar = '$fileToUpload' WHERE id_user = '$user_id'");
             header("Location: chat.php");
             exit;
         }
@@ -60,11 +63,13 @@ $mysql->close();
 
 <body style='background-color: #002d54;'>
     <html>
-    <main style='display: flex; justify-content: center; align-items: center; margin-top: 190px;'>
+    <main style='display: flex; justify-content: center; align-items: center; margin-top: 150px;'>
         <section class="reg">
-            <br /><br />
-            <h1 style="color:white;">Ввиводите изменения</h1><br />
-            <form action="" method="POST">
+            <br />
+            <h1 style="color:white;">Ввиводите изменения</h1>
+            <form action="" method="POST" enctype="multipart/form-data">
+            <label class="text_form">Автар:</label><br />
+                <br /><input style="color:red" type="file" name="fileToUpload" id="fileToUpload"><br /><br />
                 <label class="text_form">Имя:</label><br /><br />
                 <input class="form_reg" type="text" name="name" /><br />
                 <span style="color:red">
