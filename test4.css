@@ -1,0 +1,194 @@
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing:border-box;
+}
+
+.display{
+	display:flex;
+	justify-content: space-between; 
+	align-items: center;
+}
+.container{
+	width: 975px;
+	margin: 0 auto;
+}
+.container1{
+	width:100%;
+	border-bottom-style: ridge;
+}
+.jpg{
+	width:25px;
+	height:25px; 
+	flex-shrink: 0; 
+}
+.jpg img{
+	width: 100%;
+}
+.png{
+	padding:3px;
+	height:40px;
+	display:flex;
+	 	
+}
+.svg{
+	display:flex;
+	align-items: center;
+}
+.svg1{
+	margin-left:300px;
+	margin-top:55px;
+}
+.button{ 
+	background-color: #3c93ff;
+    outline: none;
+    border: none;
+    color: white;
+    padding: 10px;
+    margin-left: 10px;
+    border-radius: 14px;
+    box-sizing: content-box;
+}
+.text{
+	display:block;
+
+}
+.text1{
+	margin-top:7px;
+	display:block; 
+}
+.text2{
+	margin-top:7px; 
+	display:flex;
+}
+.text3{
+	margin-top:7px; 
+	display:flex; 
+	width:20px;
+	height:20px;	
+}
+.text4{
+	margin-top:7px; 
+	display:flex; 
+	height:20px;	
+}
+.text5{
+	margin-top:7px; 	
+	display:flex; 
+	height:20px;	
+}
+.svg{
+	height:20px;
+}
+.display{
+	display:flex;
+}
+.supercar{
+	margin-left: 300px;
+    margin-top: 55px;
+    border-radius: 50%;
+    width: 185px;
+}
+.block{
+	display:flex;
+	align-items: baseline;
+	margin-top: 50px;
+}
+.block1{
+	display:flex;
+	justify-content:space-between;  
+}
+.bmw{
+	padding:4px;
+	border:solid 1px;
+	height: 100px;
+	border-radius:50%;
+	margin-left:80px;
+	margin-top:290px;
+}
+.text6{
+	display:flex; 
+	margin-left: 70px;
+}
+.container3{
+    display: flex;
+    justify-content: center;
+    height: 500px;
+}
+.png12{
+	background-color:#fbfbfb;
+}
+.center{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.car{
+	width:400px;
+	height:355px;
+	margin-left: 30px;
+	margin-top: 30px;
+}
+.display0{
+	margin-top:70px;
+	margin: 0 auto;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	margin-top: 10px;
+	border-color:#b5b5b5;
+}
+.display01{
+	display: flex;
+	justify-content: center;
+	margin-top:50px;
+}
+.text0{
+	font-size:20px;
+	margin-left:45px;
+}
+.border{
+	border-bottom:solid 1px;
+    margin-top: 35px;
+    border-color: dimgrey;
+}
+.text01{
+margin-left:15px;
+color:#8c8479;
+}
+.display02{	
+	display:flex;
+	justify-content:center;
+	margin:50px;
+}
+
+.imput_submit{
+    padding: 4px 31px;
+    border-radius: 12px;
+    background: #3c93ff;
+    color: wheat;
+    font-size: 26px;
+	margin-left: 10px;
+}
+
+.imput_text{
+	width: 550px;
+    height: 40px;
+    padding: 12px;
+    font-size: 17px;
+    border-radius: 10px;
+}
+.form_scratch{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.img_form{
+	width: 500px;
+	height: 500px;
+	margin: 40px;
+}
+.img{
+	display: flex;
+    justify-content: center;
+}

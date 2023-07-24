@@ -64,13 +64,12 @@
 }
 
 .textarea {
-    width: 1042px;
-    height: 28px;
+    width: 1060px;
     border-radius: 20px;
-    font-size: 25px;
+    font-size: 30px;
     color: white;
     background-color: blueviolet;
-    padding: 17px;
+    padding: 16px;
     border: 4px solid white;
 }
 
@@ -189,7 +188,7 @@
     width: 87px;
     height: 100%;
     border-radius: 100%;
-    margin-top: -46px;
+    margin-top: -53px;
 
 }
 
@@ -201,7 +200,9 @@
 
 .name_sty {
     font-size: 25px;
-    margin-left: 175px;
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
 }
 
 ::-webkit-scrollbar {
@@ -242,6 +243,7 @@
     font-size: 20px;
     word-wrap: break-word;
     width: 100%;
+    margin-top: 7px;
 }
 
 .block1 {
@@ -336,6 +338,8 @@
 .f{
     color: blue;
     font-weight: 700;
+    margin-left: 40px;
+    margin-top: -23px;
 }
 .avatar{
     width: 30px;
@@ -345,4 +349,42 @@
 .avatar_4{
     border-radius: 30px;
     margin-left: 12px;
+}
+.use{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-left: -80px;
+}
+.gallery_button{
+    background-color: #0ec63f;
+    border-radius: 32%;
+    padding: 27px;
+    text-decoration: none;
+    color: #190077;
+    font-size: 20px;
+    margin-left: 6px;
+    margin-top:15px;
+}
+.ins{
+    margin-top: 27px;
+    width: 80px;
+    height: 77px;
+    border-radius: 22px;
+}
+.inst{
+    width: 96px;
+    height: 92px;
+    margin: -9px;
+}
+.add{
+    width: 53px;
+    height: 50px;
+    margin-left: 27px;
+    border-radius: 8px
+}
+
+.add_img{
+    width: 50px;
+    height: 50px;
 }
