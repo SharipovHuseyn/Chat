@@ -90,13 +90,12 @@
     width: 185px;
 }
 .block{
-	display:flex;
-	align-items: baseline;
-	margin-top: 50px;
+    display: flex;
+    align-items: center;
+    margin-top: 75px;
 }
 .block1{
 	display:flex;
-	justify-content:space-between;  
 }
 .bmw{
 	padding:4px;
@@ -184,11 +183,21 @@ color:#8c8479;
 	justify-content: center;
 }
 .img_form{
-	width: 500px;
-	height: 500px;
+	width: 100%;
+	height: 100%;
 	margin: 40px;
 }
 .img{
 	display: flex;
     justify-content: center;
+}
+.img_a{
+    display: flex;
+    justify-content: center;
+}
+.position_img{
+    display: grid;
+    grid-template-columns: repeat(3, 500px);
+    gap: 24px;
+    margin: 100px;
 }

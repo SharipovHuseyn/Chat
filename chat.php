@@ -8,8 +8,7 @@ $friends = $mysql->query("SELECT * FROM `users`");
 $My_img = $mysql->query("SELECT * FROM `users`");
 $My_name = $mysql->query("SELECT * FROM `users`");
 $fr_name = $mysql->query("SELECT * FROM `users`");
-$today = date_default_timezone_set('Tajikistan/Dushanbe');
-$showMessages = $mysql->query("SELECT users.id_user, users.name, users.avatar,  messages.text, messages.id_user_from, messages.id_user_to, messages.created_at FROM users INNER JOIN messages ON messages.id_user_from = users.id_user");
+$showMessages = $mysql->query("SELECT users.id_user, users.name, users.avatar, attchament.type, attchament.path, messages.text, messages.id_user_from, messages.id_user_to, messages.created_at FROM users INNER JOIN messages ON messages.id_user_from = users.id_user INNER JOIN attchament ON attchament.Id = messages.id_user_to");
 
 $current_user_id = $_SESSION['id_user'];
 $error_mess = "";
@@ -24,7 +23,7 @@ if (!isset($current_user_id)) {
 if (isset($_GET["id_user"])) {
     $id_user = $_GET["id_user"];
 }
-print_r($id_user);
+
 if (isset($_POST["message"])) {
 
     $message = $_POST["message"];
@@ -66,7 +65,8 @@ function showMessages($showMessages)
                     echo "<section class='soob'>
                     <div class = 'mess1'>
                     <img class='avatar' src='" . substr($row['avatar'], 23) . "' alt='" . $row['name'] . "/>
-                    // <b style.color= 'red';'></b>
+                    <b style.color= 'red';'></b>
+                    <img class='attchament' src='" . substr($row['path'], 23) . "'/>
                     <p class='text1'>" . $row['text'] . "</p>
                     <p class='date'>" . substr($row['created_at'], 10, 6) . "</p></div>
                     </section>
@@ -75,9 +75,11 @@ function showMessages($showMessages)
             if($row['id_user_to'] == $_SESSION['id_user'])
                 if ($row['id_user_from'] == $_GET["id_user"]) {
                     echo "<div class = 'mess2'>
-                    <img class='avatar' src='" . substr($row['avatar'], 23) . "' alt='" . $row['name'] . ">
-                    // <b style.color= 'red';'></b>
+                    <img class='avatar' src='" . substr($row['avatar'], 23) . "' alt='" . $row['name'] . ".>
+                    <b style.color= 'red';'></b>
                     <p class='f'>" . $row['name'] . "</p>
+                    <img class='attchament' src='" . substr($row['path'], 23) . "'/>
+                    <b style.color= 'red';'></b>
                     <p class='text1'>" . $row['text'] . "</p>
                     <p class='date1'>" . substr($row['created_at'], 10, 6) . "</p>
                     </div>
@@ -94,18 +96,31 @@ function fr_name($fr_name){
             echo "<h1 class='text3'>".$row['name']."</h1>
             <img class='avatar_4' src='".substr($row['avatar'], 23)."' alt='".$row['name']."' />";
         }
+        if($_GET["id_user"] == ""){
+            echo '<h1 class="text3">Chat.ru</h1>';
+            return;
+        }
     
     }
 }
 
-if ($message == "") {
-    $error_mess = "Не возможно отправлять пустую строку!";
-    $error = true;
-}
+
 
 if (isset($_POST['messages_send'])) {
-    if (!$error)
-        $mysql->query("INSERT INTO `messages` (`id_user_from`, `id_user_to`, `text`, `created_at`) VALUES('$current_user_id', '$id_user', '$message', '$today')");
+    if ($message == "") {
+            $error_mess = "Не возможно отправлять пустую строку!";
+            $error = true;
+        }
+
+    $name = "/opt/lampp/htdocs/chat/form-data/data".$_FILES["fileToUpload"]["name"];
+    move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $name);
+    if(isset($_POST['fileToUpload'])){
+        $mysql->query("INSERT INTO `attchament` (`path`, `type`, `id`) VALUES('$name', 'image', '$id_user')");
+    }
+    
+    if (!$error){
+        $mysql->query("INSERT INTO `messages` (`id_user_from`, `id_user_to`, `text`, `created_at`, `id_image`) VALUES('$current_user_id', '$id_user', '$message', '$today', '$id_user')");
+    }
 }
 
 function My_img($My_img)
@@ -124,6 +139,7 @@ function My_name($My_name)
         }
     }
 }
+
 
 $mysql->close();
 ?>
@@ -153,7 +169,7 @@ $mysql->close();
             <div>
                 <form class='img_add' action='upload.php?id_user="<?=$current_user_id?>"' method='get'>
                     <button class='add' type='submit' name='upload' value='<?=$current_user_id?>'>
-                        <img class='add_img' src='image/img_add.png' alt='add'/>
+                        <img class='add_img' src='image/instag_add.png' alt='add'/>
                     </button>
                 </form>
             </div>
@@ -171,8 +187,9 @@ $mysql->close();
                         <?= showMessages($showMessages) ?>
                     </div>
                 </div>
-                <form class="form_send" action="" method="post">
+                <form class="form_send" action="" method="post" enctype="multipart/form-data">
                     <input class="textarea" type="text" name="message" placeholder="<?= $error_mess ?>">
+                    <input class="custom-file-input" type="file" name="fileToUpload" id="fileToUpload">
                     <input type="submit" class="send" name="messages_send" value="Отправить">
                 </form>
                 <div class="users">

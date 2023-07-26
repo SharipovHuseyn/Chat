@@ -4,7 +4,7 @@ session_start();
 $mysql = new mysqli("localhost", "root", "", "Chat");
 $mysql->query("SET NAMES 'utf8'");
 $gallery = $mysql->query("SELECT * FROM `gallery`");
-$friend = $mysql->query("SELECT * FROM `gallery`");
+$my_data = $mysql->query("SELECT * FROM `users`");
 $current_user_id = $_SESSION['id_user'];
 
 if (isset($_GET["upload"])) {
@@ -15,32 +15,43 @@ if (isset($_POST["fileToUpload"])) {
     $image_name = $_POST["fileToUpload"];
 }
 
+if ($my_data->num_rows > 0) {
+	while ($row = $my_data->fetch_assoc()) {
+		if($_GET["upload"] == $row['id_user']){
+			$my_name = $row['name'];
+			$avatar = substr($row['avatar'], 23);
+		}
+	}
+}
+
 if (isset($_POST["submit"])) {
-    $name = "/opt/lampp/htdocs/chat/form-data/data".$_FILES["fileToUpload"]["name"];
+	$name = "/opt/lampp/htdocs/chat/form-data/data".$_FILES["fileToUpload"]["name"];
     move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $name);
 
     $mysql->query("INSERT INTO `gallery` (`name`, `path`, `id_user`) VALUES('$image_name', '$name', '$user_id')");
 }
 
-function friend($friend){
-	if ($friend->num_rows > 0) {
-        while ($row = $friend->fetch_assoc()) {
-			if($_GET["upload"] == $_SESSION['id_user']){
-				echo '<form action="upload.php?id_user="'.$_SESSION['id_user'].'"" method="post" enctype="multipart/form-data">
-				Выберите изоброжения:<br />
-				<br /><input type="file" name="fileToUpload" id="fileToUpload">
-				<br /><br />Имя изоброжения:
-				<br /><br /><input type="text" name="fileToUpload">
-				<br /><br /><input type="submit" value="Upload Image" name="submit"><br /><br />
-			</form>';
-			}
+if($_GET["upload"] == $_SESSION['id_user']){
+	$add_image = '<form action="" method="post" enctype="multipart/form-data">
+	Выберите изоброжения:<br />
+	<br /><input type="file" name="fileToUpload" id="fileToUpload">
+	<br /><br />Имя изоброжения:
+	<br /><br /><input type="text" name="fileToUpload">
+	<br /><br /><input type="submit" value="Upload Image" name="submit"><br /><br />
+</form>
+<hr/>';}
+
+function friend($gallery){
+	if ($gallery->num_rows > 0) {
+        while ($row = $gallery->fetch_assoc()) {
 			if($_GET["upload"] == $row['id_user']){
-				echo "<img class='img_form' src='".substr($row['path'], 23)."' alt='".$row['name']."'>";
+				echo "<div class='img_a'>
+				<img class='img_form' src='".substr($row['path'], 23)."' alt='".$row['name']."'>
+				</div>";
 			}
 		}
 	}
 }
-
 
 $mysql->close();
 ?>
@@ -80,72 +91,23 @@ $mysql->close();
 	<div class="png12">
 	<div class="container">
 		<div class="block1">
-			<img class="supercar" src="./img/supercarcomp.jpg">
+			<img class="supercar" src="<?=$avatar?>">
 			
 			<div class="container2">
 				<div class="block">
-					<h2><span><strong>supercarcompany</strong></span></h2><button class="button">подписаться</button>
+					<h2><span><strong><?=$my_name?></strong></span></h2><button class="button">подписаться</button>
 				</div>
-				<h3>
-				<span class="text">
-					<b>545</b>публикаций  <b>51,7 тыс.</b> подписчиков <b>175</b> подпичиков
-				</span>
-				<span class="text1"><strong>supercar company</strong></span>
-				<span class="text2"><img class="svg"src="./img/icons/petrol_station.svg"> THE HOME OF SUPERCARS</span>
-				<span class="text3"><img src="./img/icons/порщень.svg">Fouwer/Ower:@misterkyc</span>
-				<span class="text4"><img src="./img/icons/рука.svg">Use #SupercarCompany to get featured!</span>
-				<span class="text5"><img src="./img/icons/канверт.svg">DM for Inquiries/Partnerships!</span>
-				</h3>
 			</div>
 		</div>
 	</div>
 	<br />
 	<br />
 	<hr />
-	<!-- <div class="container3">
-		<div class="center">
-			<img class="bmw"src="./img/votes/vote.jpg">
-			<span class="text6"><strong>BATLLES</strong></span>
-		</div>
-		<div class="center">
-			<img class="bmw"src="./img/votes/vote2.jpg">
-			<span class="text6"><strong>YOUR OPINION V</strong></span>
-		</div>
-		<div class="center">
-			<img class="bmw"src="./img/votes/vote3.jpg">
-			<span class="text6"><strong>PHOTOS/INOS||</strong></span>
-		</div class="center">
-		<div>	<img class="bmw"src="./img/votes/vote4.jpg">
-			<span class="text6"><strong>BATLLES V</strong></span></div class="center">
-
-			<div class="center"><img class="bmw"src="./img/votes/vote5.jpg">
-				<span class="text6"><strong>YOUR OPINION |V</strong></span></div>	
-				<div class="center">	<img class="bmw"src="./img/votes/vote6.jpg">
-					<span class="text6"><strong>PHOTOS/INOS</strong></span></div>
-					<div class="center">	<img class="bmw"src="./img/votes/vote7.jpg">
-						<span class="text6"><strong>BATLLES|V</strong></div>
-						</span>
-	       </div> -->
-    <!-- <form class="form_scratch" action="" method="post">
-        <br /><br /><input class="imput_text" type="text" name="name_img" placeholder="Имя изоброжения:">
-        <input class="imput_submit" type="submit" value="поиск" name="send">
-    </form>
-	<br/>
-	<br/>
-	<br/>
-	<br/>
-		   <hr />
-		   <br />
-		   <form style="margin-left: 853px" action="upload.php" method="post" enctype="multipart/form-data">
-        Выберите изоброжения:<br />
-        <br /><input type="file" name="fileToUpload" id="fileToUpload">
-        <br /><br />Имя изоброжения:
-        <br /><br /><input type="text" name="fileToUpload">
-        <br /><br /><input type="submit" value="Upload Image" name="submit"><br /><br />
-    </form>
-	<hr/> -->
+	<?=$add_image?> 
     <div class="img">
-        <?=friend($friend)?>
+        <div class='position_img'>
+		<?=friend($gallery)?>
+		</div>
     </div>
 			   <hr/>
 	       <div class="display01">
