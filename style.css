@@ -392,10 +392,6 @@
     width: 300px;
     margin-top: 10px;
 }
-.custom-file-input {
-
-
-}
  .custom-file-input::-webkit-file-upload-button {
   visibility: hidden;
 }
@@ -414,3 +410,7 @@
     font-size: 10pt;
     margin-left: 29px;
 } 
+.image_message{
+    width:300px;
+    margin-top: 15px;   
+}

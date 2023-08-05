@@ -8,7 +8,8 @@ $friends = $mysql->query("SELECT * FROM `users`");
 $My_img = $mysql->query("SELECT * FROM `users`");
 $My_name = $mysql->query("SELECT * FROM `users`");
 $fr_name = $mysql->query("SELECT * FROM `users`");
-$showMessages = $mysql->query("SELECT users.id_user, users.name, users.avatar, attchament.type, attchament.path, messages.text, messages.id_user_from, messages.id_user_to, messages.created_at FROM users INNER JOIN messages ON messages.id_user_from = users.id_user INNER JOIN attchament ON attchament.Id = messages.id_user_to");
+$attchament = $mysql->query("SELECT * FROM `attchament`");
+$showMessages = $mysql->query("SELECT users.id_user,  users.name, users.avatar, messages.text, messages.id_image, messages.id_user_from, messages.id_user_to, messages.created_at, attchament.path, attchament.id, attchament.type FROM users INNER JOIN messages ON messages.id_user_from = users.id_user INNER JOIN attchament ON attchament.id = messages.id_image");
 
 $current_user_id = $_SESSION['id_user'];
 $error_mess = "";
@@ -65,22 +66,26 @@ function showMessages($showMessages)
                     echo "<section class='soob'>
                     <div class = 'mess1'>
                     <img class='avatar' src='" . substr($row['avatar'], 23) . "' alt='" . $row['name'] . "/>
-                    <b style.color= 'red';'></b>
-                    <img class='attchament' src='" . substr($row['path'], 23) . "'/>
-                    <p class='text1'>" . $row['text'] . "</p>
-                    <p class='date'>" . substr($row['created_at'], 10, 6) . "</p></div>
-                    </section>
-                    <br /><br />";
+                    <b style.color= 'red';'></b>";
+                    if($row['id_image'] == $row['id']){
+                        echo "<img class='image_message' src='".substr($row['path'], 23)."' alt=''>
+                        <b style.color= 'red';'></b>";
+                    }
+                    echo "<p class='text1'>" . $row['text'] . "</p>
+                    <p class='date'>" . substr($row['created_at'], 10, 6) . "</p>
+                    </div></section><br /><br />";
                 }
             if($row['id_user_to'] == $_SESSION['id_user'])
                 if ($row['id_user_from'] == $_GET["id_user"]) {
                     echo "<div class = 'mess2'>
                     <img class='avatar' src='" . substr($row['avatar'], 23) . "' alt='" . $row['name'] . ".>
                     <b style.color= 'red';'></b>
-                    <p class='f'>" . $row['name'] . "</p>
-                    <img class='attchament' src='" . substr($row['path'], 23) . "'/>
-                    <b style.color= 'red';'></b>
-                    <p class='text1'>" . $row['text'] . "</p>
+                    <p class='f'>" . $row['name'] . "</p>";
+                    if($row['id_image'] == $row['id']){
+                        echo "<img class='image_message' src='".substr($row['path'], 23)."' alt=''>
+                        <b style.color= 'red';'></b>";
+                    }
+                    echo "<p class='text1'>" . $row['text'] . "</p>
                     <p class='date1'>" . substr($row['created_at'], 10, 6) . "</p>
                     </div>
                     <br /><br />";
@@ -96,7 +101,7 @@ function fr_name($fr_name){
             echo "<h1 class='text3'>".$row['name']."</h1>
             <img class='avatar_4' src='".substr($row['avatar'], 23)."' alt='".$row['name']."' />";
         }
-        if($_GET["id_user"] == ""){
+        if($_GET["id_user"] == false){
             echo '<h1 class="text3">Chat.ru</h1>';
             return;
         }
@@ -105,21 +110,38 @@ function fr_name($fr_name){
 }
 
 
-
 if (isset($_POST['messages_send'])) {
-    if ($message == "") {
-            $error_mess = "Не возможно отправлять пустую строку!";
-            $error = true;
-        }
+
+    if (isset($_POST["fileToUpload"])) {
+        $fileToUpload = $_POST["fileToUpload"];
+    }
+    
+    if ($message == "" && $fileToUpload != "" ) {
+        $error_mess = "Не возможно отправлять пустую строку!";
+        $error = true;
+    }  
 
     $name = "/opt/lampp/htdocs/chat/form-data/data".$_FILES["fileToUpload"]["name"];
     move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $name);
-    if(isset($_POST['fileToUpload'])){
-        $mysql->query("INSERT INTO `attchament` (`path`, `type`, `id`) VALUES('$name', 'image', '$id_user')");
-    }
-    
+
     if (!$error){
-        $mysql->query("INSERT INTO `messages` (`id_user_from`, `id_user_to`, `text`, `created_at`, `id_image`) VALUES('$current_user_id', '$id_user', '$message', '$today', '$id_user')");
+        if ($fileToUpload == "" && $message == ""){
+            if($_FILES["name"] == "png" || "jpg" || "jpeg"){
+                $img = $mysql->query("INSERT INTO `attchament` (`path`, `type`) VALUES('$name', 'image')");
+            }
+            $img = $mysql -> insert_id;
+            $mysql->query("INSERT INTO `messages` (`id_user_from`, `id_user_to`, `text`, `created_at`, `id_image`) VALUES('$current_user_id', '$id_user', '', '$today', '$img')");
+        }
+        if($message != "" && $fileToUpload != ""){
+            $mysql->query("INSERT INTO `messages` (`id_user_from`, `id_user_to`, `text`, `created_at`, `id_image`) VALUES('$current_user_id', '$id_user', '$message', '$today', '')");
+        }
+        if ($fileToUpload == "" && $message != ""){
+            if($_FILES["name"] == "png" || "jpg" || "jpeg"){
+                $img = $mysql->query("INSERT INTO `attchament` (`path`, `type`) VALUES('$name', 'image')");
+            }
+            $img = $mysql -> insert_id;
+            $mysql->query("INSERT INTO `messages` (`id_user_from`, `id_user_to`, `text`, `created_at`, `id_image`) VALUES('$current_user_id', '$id_user', '$message', '$today', '$img')");
+        }
     }
 }
 
@@ -157,7 +179,7 @@ $mysql->close();
             <h1 class="d">CHAT.RU</h1>
             <div class="general">
                 <div class="My_name">
-                    <p href="setings.php">
+                    <p>
                         <?= My_name($My_name) ?>
                     </p>
                     <img class='avatar_3' src="<?= My_img($My_img) ?>" alt="<?= My_img($My_img) ?>" />
@@ -169,11 +191,11 @@ $mysql->close();
             <div>
                 <form class='img_add' action='upload.php?id_user="<?=$current_user_id?>"' method='get'>
                     <button class='add' type='submit' name='upload' value='<?=$current_user_id?>'>
-                        <img class='add_img' src='image/instag_add.png' alt='add'/>
+                        <img class='add_img' src='image/instag_add.png' alt='add' />
                     </button>
                 </form>
             </div>
-        </div> 
+        </div>
 
     </header>
     <main>
@@ -199,5 +221,6 @@ $mysql->close();
             </div>
         </section>
     </main>
+
     </html>
 </body>
