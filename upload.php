@@ -6,12 +6,14 @@ $mysql->query("SET NAMES 'utf8'");
 $gallery = $mysql->query("SELECT * FROM `gallery`");
 $my_data = $mysql->query("SELECT * FROM `users`");
 $current_user_id = $_SESSION['id_user'];
-$_SESSION['img'] = $_GET["upload"];
+$_SESSION['id'] = $_GET["upload"];
 
 
 if (isset($_GET["upload"])) {
 	$user_id = $_GET["upload"];
 }
+
+
 
 if (isset($_POST["fileToUpload"])) {
 	$image_name = $_POST["fileToUpload"];
@@ -44,7 +46,7 @@ if ($_GET["upload"] == $_SESSION['id_user']) {
 <hr/>';
 }
 
-if($user_id == false){
+if ($user_id == false) {
 	echo '<h1 class="text3">Chat.ru</h1>';
 	return;
 }
@@ -55,11 +57,13 @@ function friend($gallery)
 		while ($row = $gallery->fetch_assoc()) {
 			if ($_GET["upload"] == $row['id_user']) {
 				$_SESSION['PATH'] = substr($row['path'], 23);
-				echo "<form action='comment.php' method='get'><div class='img_a'>";
-				$path = "<a href='comment.php?id=".$_SESSION['PATH']."'name='img'>";
-				echo "<img class='img_form' src='" . substr($row['path'], 23) . "' alt='" . $row['name'] . "'>
-				</a>
-				</div></form>";
+				 $_SESSION['id'] = $row['id'];
+				echo "<form action='comment.php' method='get'><div class='img_a'>
+				<button style='border:1px;' type='submit' name='img' value='".$_SESSION['PATH']."?".$_SESSION['id']."'>
+				<img class='img_form' src='" . substr($row['path'], 23) . "' alt='" . $row['name'] . "'>
+			</button>
+				</div>
+				</form>";
 			}
 		}
 	}
