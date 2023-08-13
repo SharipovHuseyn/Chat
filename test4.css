@@ -258,3 +258,12 @@ color:#8c8479;
     height: 30px;
     border-radius: 30px;
 }
+.like{
+	width: 132px;
+    height: 100px;
+    margin-left: -170px;
+    margin-top: 850px;
+}
+.send_like{
+	background-image: url(./image/like.png);
+}

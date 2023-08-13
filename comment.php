@@ -5,11 +5,19 @@ $mysql = new mysqli("localhost", "root", "", "Chat");
 $mysql->query("SET NAMES 'utf8'");
 $comment = $mysql->query("SELECT users.id_user, users.avatar, comment.id_attchament, comment.id_user_from, comment.created_at, comment.text, gallery.id_user, gallery.id FROM comment INNER JOIN gallery ON comment.id_attchament = gallery.id INNER JOIN users ON users.id_user = comment.id_user_from");
 $gallery = $mysql->query("SELECT * FROM `gallery`");
+$like = $mysql->query("SELECT * FROM `like`");
 $current_user_id = $_SESSION['id_user'];
 $id_f = $_SESSION['id'];
 
 date_default_timezone_set('Asia/Dushanbe');
 $today = date("Y-m-d H:i:s", time());
+
+while ($row = $like->fetch_assoc()) {
+    $id_img_like= $row['id_img_like'];
+    $_SESSION['id_user'] = $row['id_user_like'];
+}
+
+echo $_SESSION['id_user'];
 
 if (isset($_GET["img"])) {
     $img_path = $_GET["img"];
@@ -23,6 +31,15 @@ if(isset($_POST['comment_text'])){
 
 if(isset($_POST['send_comment'])){
     $mysql->query("INSERT INTO `comment` (`text`, `id_attchament`, `id_user_from`, `created_at`) VALUES('$comment_text', '$id_attchment', '$current_user_id', '$today')");
+}
+
+if(isset($_POST['send_like'])){
+    if($current_user_id == $id_img_like){
+        echo 'ВЫ УЖЕ ЛАЙКАЛИ!';
+    }
+    if($current_user_id != $id_img_like){
+    $mysql->query("INSERT INTO `like` (`id_user_like`, `id_img_like`) VALUES('$current_user_id', '$id_attchment')");
+    }
 }
 
 function friend($comment)
@@ -54,7 +71,11 @@ $mysql->close();
     <div class="img">
         <div class='img_a'>
             <img class='img_comment' src='<?=$img_path?>' alt='<?=$img_path?>'>
-        </div>
+            <form method = 'post' action="">
+                <button type='submit' class="send_like" name='send_like'>
+                </button>
+            </form>
+</div>
         <div class="comment">
             <div>
             <?=friend($comment)?>
