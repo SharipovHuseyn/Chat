@@ -13,8 +13,6 @@ if (isset($_GET["upload"])) {
 	$user_id = $_GET["upload"];
 }
 
-
-
 if (isset($_POST["fileToUpload"])) {
 	$image_name = $_POST["fileToUpload"];
 }

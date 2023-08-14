@@ -1,29 +1,28 @@
 <?php
 session_start();
+$current_user_id = $_SESSION['id_user'];
 
 $mysql = new mysqli("localhost", "root", "", "Chat");
 $mysql->query("SET NAMES 'utf8'");
 $comment = $mysql->query("SELECT users.id_user, users.avatar, comment.id_attchament, comment.id_user_from, comment.created_at, comment.text, gallery.id_user, gallery.id FROM comment INNER JOIN gallery ON comment.id_attchament = gallery.id INNER JOIN users ON users.id_user = comment.id_user_from");
-$gallery = $mysql->query("SELECT * FROM `gallery`");
-$like = $mysql->query("SELECT * FROM `like`");
-$current_user_id = $_SESSION['id_user'];
+if (isset($_GET["img"])) {
+    $img_path = $_GET["img"];
+}$gallery = $mysql->query("SELECT * FROM `gallery`");
+$id_attchment = substr($img_path, -2);
+$like = $mysql->query("SELECT * FROM `like` WHERE 'id_img_like' = $id_attchment");
 $id_f = $_SESSION['id'];
+
+
+$likee = $mysql->query('SELECT COUNT(*) FROM `like`');
+print_r($like);
 
 date_default_timezone_set('Asia/Dushanbe');
 $today = date("Y-m-d H:i:s", time());
 
 while ($row = $like->fetch_assoc()) {
+    $id_user_like= $row['id_user_like'];
     $id_img_like= $row['id_img_like'];
-    $_SESSION['id_user'] = $row['id_user_like'];
 }
-
-echo $_SESSION['id_user'];
-
-if (isset($_GET["img"])) {
-    $img_path = $_GET["img"];
-}
-
-$id_attchment = substr($img_path, -2);
 
 if(isset($_POST['comment_text'])){
     $comment_text = $_POST['comment_text'];
@@ -34,10 +33,10 @@ if(isset($_POST['send_comment'])){
 }
 
 if(isset($_POST['send_like'])){
-    if($current_user_id == $id_img_like){
-        echo 'ВЫ УЖЕ ЛАЙКАЛИ!';
+    if($id_img_like == $id_attchment && $id_user_like == $current_user_id){
+        echo false;
     }
-    if($current_user_id != $id_img_like){
+    else{
     $mysql->query("INSERT INTO `like` (`id_user_like`, `id_img_like`) VALUES('$current_user_id', '$id_attchment')");
     }
 }

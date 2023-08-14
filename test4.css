@@ -266,4 +266,9 @@ color:#8c8479;
 }
 .send_like{
 	background-image: url(./image/like.png);
+	width: 100px;
+	height: 100px;
+	margin-left: -200px;
+	margin-top: 840px;
+	background-color: #11ffee00;
 }
