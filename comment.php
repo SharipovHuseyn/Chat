@@ -4,25 +4,40 @@ $current_user_id = $_SESSION['id_user'];
 
 $mysql = new mysqli("localhost", "root", "", "Chat");
 $mysql->query("SET NAMES 'utf8'");
-$comment = $mysql->query("SELECT users.id_user, users.avatar, comment.id_attchament, comment.id_user_from, comment.created_at, comment.text, gallery.id_user, gallery.id FROM comment INNER JOIN gallery ON comment.id_attchament = gallery.id INNER JOIN users ON users.id_user = comment.id_user_from");
+
 if (isset($_GET["img"])) {
     $img_path = $_GET["img"];
-}$gallery = $mysql->query("SELECT * FROM `gallery`");
+}
+
+$comment = $mysql->query("SELECT users.id_user, users.avatar, comment.id_attchament, comment.id_user_from, comment.created_at, comment.text, gallery.id_user, gallery.id FROM comment INNER JOIN gallery ON comment.id_attchament = gallery.id INNER JOIN users ON users.id_user = comment.id_user_from");
+$gallery = $mysql->query("SELECT * FROM `gallery`");
 $id_attchment = substr($img_path, -2);
-$like = $mysql->query("SELECT * FROM `like` WHERE 'id_img_like' = $id_attchment");
+$like = $mysql->query("SELECT * FROM `like`");
+$likeCount = $mysql->query("SELECT COUNT(*) FROM `like`");
+$like_img = $mysql->query("SELECT * FROM `like` WHERE id_img_like = $id_attchment");
 $id_f = $_SESSION['id'];
-
-
-$likee = $mysql->query('SELECT COUNT(*) FROM `like`');
-print_r($like);
+$like_img = $like_img->num_rows;
 
 date_default_timezone_set('Asia/Dushanbe');
 $today = date("Y-m-d H:i:s", time());
 
 while ($row = $like->fetch_assoc()) {
-    $id_user_like= $row['id_user_like'];
     $id_img_like= $row['id_img_like'];
+    $id_user_like= $row['id_user_like'];
 }
+
+
+if($like_img > 1){
+    while ($likeInfo = $likeCount->fetch_assoc()){
+            $likes = $likeInfo['COUNT(*)'];
+    }
+
+    if($like_img == 1){
+        $likes = '1';
+    }
+}
+
+
 
 if(isset($_POST['comment_text'])){
     $comment_text = $_POST['comment_text'];
@@ -34,9 +49,9 @@ if(isset($_POST['send_comment'])){
 
 if(isset($_POST['send_like'])){
     if($id_img_like == $id_attchment && $id_user_like == $current_user_id){
-        echo false;
+        echo 'Вы уже лайкали!';
     }
-    else{
+    elseif($id_img_like != $id_attchment && $id_user_like == $current_user_id || $id_user_like != $current_user_id){
     $mysql->query("INSERT INTO `like` (`id_user_like`, `id_img_like`) VALUES('$current_user_id', '$id_attchment')");
     }
 }
@@ -70,21 +85,23 @@ $mysql->close();
     <div class="img">
         <div class='img_a'>
             <img class='img_comment' src='<?=$img_path?>' alt='<?=$img_path?>'>
-            <form method = 'post' action="">
+            <form method='post' action="">
                 <button type='submit' class="send_like" name='send_like'>
+                    <p class="font_like"><?=$likes?></p>
                 </button>
             </form>
-</div>
+        </div>
         <div class="comment">
             <div>
-            <?=friend($comment)?>
+                <?=friend($comment)?>
             </div>
         </div>
     </div>
 
-<form class='form_comment' method='post' action=''>
-<input type="text" class="comment_text" name ='comment_text'>
-<button type='submit' class="send_comment" name='send_comment'>Отправить</button>
-</form>
+    <form class='form_comment' method='post' action=''>
+        <input type="text" class="comment_text" name='comment_text'>
+        <button type='submit' class="send_comment" name='send_comment'>Отправить</button>
+    </form>
+
     </html>
 </body>

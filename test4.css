@@ -266,9 +266,16 @@ color:#8c8479;
 }
 .send_like{
 	background-image: url(./image/like.png);
-	width: 100px;
-	height: 100px;
-	margin-left: -200px;
-	margin-top: 840px;
-	background-color: #11ffee00;
+    width: 230px;
+    height: 156px;
+    border: 1px;
+    margin-left: -274px;
+    margin-top: 785px;
+    background-color: #11ffee00;
+}
+.font_like{
+	color: white;
+    margin-left: 120px;
+    font-size: 55px;
+    margin-top: -30px;
 }
